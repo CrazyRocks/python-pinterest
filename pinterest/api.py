@@ -141,10 +141,10 @@ class Api(object):
 
         parameters['protected'] = protected if not None and isinstance(protected, bool) else False
 
-        json_data = self._requestUrl(url, 'PUT', data=parameters)
-        data = self._parseAndCheckPinterest(json_data)
+        response = self._requestUrl(url, 'PUT', data=parameters)
+        data = self._parseAndCheckPinterest(response)
 
-        return Board.newFromJsonDict(data)
+        return Board.newFromJsonDict(data['data'])
 
     def updateBoard(self,
                     board_id=None,
@@ -156,7 +156,7 @@ class Api(object):
                     protected=False):
         """
         Edits an existing board
-        :param id: The ID of the Board
+        :param board_id: The ID of the Board
         :param name: The name of the Board
         :param privacy: Board privacy settings [public, secret]
         :param category: The category key of the board (see CATEGORIES)
@@ -199,10 +199,10 @@ class Api(object):
         if protected is not None and isinstance(protected, bool):
             parameters['protected'] = protected
 
-        json_data = self._requestUrl(url, 'POST', data=parameters)
-        data = self._parseAndCheckPinterest(json_data)
+        response = self._requestUrl(url, 'POST', data=parameters)
+        data = self._parseAndCheckPinterest(response)
 
-        return Board.newFromJsonDict(data)
+        return Board.newFromJsonDict(data['data'])
 
     def createPin(self,
                   board_id=None,
@@ -221,11 +221,11 @@ class Api(object):
         :param description: The text description for the Pin
         :param source_url: The URL from which the Pin's image was returned
         :param place: The place at which to tag the pin
-        :param share_facebook: Whether or not the user wants to share this Pin on Facebook
-        :param share_twitter: Whether or not the user wants to share this Pin on Twitter
+        :param share_facebook: Whether or not the user wants to share this Pin on Facebook (defaults False)
+        :param share_twitter: Whether or not the user wants to share this Pin on Twitter (defaults False)
         :param image_url: The URL of the image to use for the Pin, if it is not uploaded directly
         :param image: The image to use for this Pin as a stream of bytes
-        :param method: The method that created the pin (defaults to api_other)
+        :param method: The method that created the pin (defaults to api_sdk)
                        [android, android_tablet, api_other, api_sdk, bad, bookmarklet, button, email, extension, ipad,
                        iphone, scraped, unknown, uploaded]
         :param sdk_client_id: The original client id of an application that made an SDK request
@@ -255,9 +255,13 @@ class Api(object):
 
         if share_facebook is not None and isinstance(share_facebook, bool):
             parameters['share_facebook'] = share_facebook
+        else:
+            parameters['share_facebook'] = False
 
         if share_twitter is not None and isinstance(share_twitter, bool):
             parameters['share_twitter'] = share_twitter
+        else:
+            parameters['share_twitter'] = False
 
         if image_url is not None:
             parameters['image_url'] = image_url
@@ -265,18 +269,22 @@ class Api(object):
         if image is not None:
             parameters['image'] = image
 
+        if (image_url is None or image_url == '') and (image is None or image == ''):
+            raise PinterestError({'message': 'Either an image URL or image file is required.'})
+
         if method is not None and method not in METHODS:
             raise PinterestError({'message': 'The Pin upload method must be one of the following: {}'.format(
                 ', '.join(METHODS)
             )})
+        parameters['method'] = method if method is not None else 'api_sdk'
 
         if sdk_client_id is not None:
             parameters['sdk_client_id'] = sdk_client_id
 
-        json_data = self._requestUrl(url, 'PUT', data=parameters)
-        data = self._parseAndCheckPinterest(json_data)
+        response = self._requestUrl(url, 'PUT', data=parameters)
+        data = self._parseAndCheckPinterest(response)
 
-        return Board.newFromJsonDict(data)
+        return Board.newFromJsonDict(data['data'])
 
     def getBoardPins(self, board_id=None):
         """
@@ -285,10 +293,10 @@ class Api(object):
         :return: List of Pins for a specific Board
         """
         url = '{}/boards/{}/pins/'.format(self.base_url, board_id)
-        json_data = self._requestUrl(url, 'GET')
-        data = self._parseAndCheckPinterest(json_data)
+        response = self._requestUrl(url, 'GET')
+        data = self._parseAndCheckPinterest(response)
 
-        return [Pin.newFromJsonDict(x) for x in data['pins']]
+        return [Pin.newFromJsonDict(x) for x in data['data']]
 
     def getDomain(self, domain_name=None):
         """
@@ -304,10 +312,10 @@ class Api(object):
         if domain_name is None:
             raise PinterestError({'message': 'A Domain name is required.'})
 
-        json_data = self._requestUrl(url, 'GET')
-        data = self._parseAndCheckPinterest(json_data)
+        response = self._requestUrl(url, 'GET')
+        data = self._parseAndCheckPinterest(response)
 
-        return Domain.newFromJsonDict(data)
+        return Domain.newFromJsonDict(data['data'])
 
     def getDomainPins(self, domain_name=None):
         """
@@ -315,7 +323,7 @@ class Api(object):
         :param domain_name: The Domain's name
         :return: A list of Pins for a specific Domain
         """
-        url = '{}/domains/{}/pins'.format(self.base_url, domain_name)
+        url = '{}/domains/{}/pins/'.format(self.base_url, domain_name)
 
         if not self._access_token:
             raise PinterestError({'message': 'API must be authenticated.'})
@@ -323,10 +331,10 @@ class Api(object):
         if domain_name is None:
             raise PinterestError({'message': 'A Domain name is required.'})
 
-        json_data = self._requestUrl(url, 'GET')
-        data = self._parseAndCheckPinterest(json_data)
+        response = self._requestUrl(url, 'GET')
+        data = self._parseAndCheckPinterest(response)
 
-        return [Pin.newFromJsonDict(x) for x in data['pins']]
+        return [Pin.newFromJsonDict(x) for x in data['data']]
 
     def getPinComments(self, pin_id=None):
         """
@@ -342,10 +350,10 @@ class Api(object):
         if pin_id is None:
             raise PinterestError({'message': 'A Pin ID is required.'})
 
-        json_data = self._requestUrl(url, 'GET')
-        data = self._parseAndCheckPinterest(json_data)
+        response = self._requestUrl(url, 'GET')
+        data = self._parseAndCheckPinterest(response)
 
-        return [Comment.newFromJsonDict(x) for x in data['comments']]
+        return [Comment.newFromJsonDict(x) for x in data['data']]
 
     def getMyInformation(self):
         """
@@ -357,10 +365,10 @@ class Api(object):
         if not self._access_token:
             raise PinterestError({'message': 'API must be authenticated.'})
 
-        json_data = self._requestUrl(url, 'GET')
-        data = self._parseAndCheckPinterest(json_data)
+        response = self._requestUrl(url, 'GET')
+        data = self._parseAndCheckPinterest(response)
 
-        return User.newFromJsonDict(data)
+        return User.newFromJsonDict(data['data'])
 
     def getMyBoards(self):
         """
@@ -372,10 +380,10 @@ class Api(object):
         if not self._access_token:
             raise PinterestError({'message': 'API must be authenticated.'})
 
-        json_data = self._requestUrl(url, 'GET')
-        data = self._parseAndCheckPinterest(json_data)
+        response = self._requestUrl(url, 'GET')
+        data = self._parseAndCheckPinterest(response)
 
-        return [Board.newFromJsonDict(x) for x in data['boards']]
+        return [Board.newFromJsonDict(x) for x in data['data']]
 
     def _buildUrl(self, url, path_elements=None, extra_params=None):
         """
@@ -480,15 +488,15 @@ class Api(object):
                 raise PinterestError(str(e))
         return 0
 
-    def _parseAndCheckPinterest(self, json_data):
+    def _parseAndCheckPinterest(self, response):
         """
         Trys to parse the JSON returned from Pinterest
         Returns an empty dictionary if there is an error
-        :param json_data: JSON data returned from Pinterest
+        :param response: Request response returned from Pinterest
         :return: Parsed JSON
         """
         try:
-            data = json.loads(json_data)
+            data = response.json()
             self._checkForPinterestError(data)
         except ValueError:
             raise PinterestError({'message': "An error occurred while parsing a Pinterest response."})
@@ -501,7 +509,5 @@ class Api(object):
         :param data: A python dict created from the Pinterest JSON response
         :return: PinterestError wrapping the Pinterest error message if one exists
         """
-        if 'error' in data:
-            raise PinterestError(data['error'])
-        if 'errors' in data:
-            raise PinterestError(data['errors'])
+        if 'status' in data and data['status'] == 'failure':
+            raise PinterestError(data['message'])
