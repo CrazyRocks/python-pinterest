@@ -1,0 +1,13 @@
+{
+  "category": null,
+  "is_collaborative": false,
+  "layout": "default",
+  "name": "Test board 1",
+  "url": "/testuser/board1/",
+  "created_at": "Mon, 26 Sep 2011 00:26:19 +0000",
+  "collaborated_by_me": false,
+  "followed_by_me": true,
+  "type": "board",
+  "id": "178314535185157810",
+  "image_thumbnail_url": "http://media-cache-ak0.pinimg.com/upload/178314535185157810_board_thumbnail_2015-03-07-16-50-40_9153_60.jpg"
+}
