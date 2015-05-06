@@ -1,8 +1,8 @@
-Python Pinterest
+Pinterest
 
 A Python wrapper around the Pinterest API.
 
-By jimbach @ Shoutlet, Inc <jordan.limbach@shoutlet.com|limbachjordan@gmail.com>
+By github/jimbach (limbachjordan@gmail.com) @ Shoutlet, Inc
 
 
 ============
