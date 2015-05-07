@@ -1,4 +1,6 @@
+=========
 Pinterest
+=========
 
 A Python wrapper around the Pinterest API.
 
