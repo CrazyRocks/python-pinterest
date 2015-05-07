@@ -71,7 +71,6 @@ def createBoard(self,
                 description=None,
                 protected=False):
 """
-
 Creates a Board
 
 - param name: The name of the Board
@@ -96,7 +95,6 @@ def createPin(self,
               method=None,
               sdk_client_id=None):
 """
-
 Creates a Pin
 
 - param board_id: The ID of the board to pin onto (must be owned by the user
@@ -116,7 +114,6 @@ Creates a Pin
 def getBoardPins(self,
 		 board_id=None):
 """
-
 Gets the Pins of a specific Board
 
 - param board_id: The Board ID
@@ -127,7 +124,6 @@ Gets the Pins of a specific Board
 def getDomain(self,
 	      domain_name=None):
 """
-
 Gets a Domain's info
 
 - param domain_name: The Domain name
@@ -138,7 +134,6 @@ Gets a Domain's info
 def getDomainPins(self,
                   domain_name=None):
 """
-
 Gets the Pins for a specific Domain
 
 - param domain_name: The Domain's name
@@ -149,7 +144,6 @@ Gets the Pins for a specific Domain
 def getPinComments(self,
                    pin_id=None):
 """
-
 Gets the comments for a specific Pin
 
 - param pin_id: The Pin ID
@@ -160,7 +154,6 @@ Gets the comments for a specific Pin
 def getMyInformation(self
                     ):
 """
-
 Gets the User details for the authenticated User
 
 - return: A User object
@@ -170,7 +163,6 @@ Gets the User details for the authenticated User
 def getMyBoards(self
                ):
 """
-
 Gets the Boards for the authenticated User
 
 - return: List of Boards for the authenticated User
