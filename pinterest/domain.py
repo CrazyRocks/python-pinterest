@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from pinterest import json, PinterestError
+import json
 
 
 class Domain(object):
@@ -30,7 +30,7 @@ class Domain(object):
             'client_details': {}}
 
         # Override defaults
-        for (param, default) in param_defaults.iteritems():
+        for (param, default) in param_defaults.items():
             setattr(self, param, kwargs.get(param, default))
 
     @property
@@ -168,22 +168,15 @@ class Domain(object):
         The return value uses the same key names as the JSON representation
         :return: A dict representing this pinterest.Domain instance
         """
-        data = {}
-        if self.id:
-            data['id'] = self.id
-        if self.name:
-            data['name'] = self.name
-        if self.type:
-            data['type'] = self.type
-        if self.favicon:
-            data['favicon'] = self.favicon
-        if self.thumbnails:
-            data['thumbnails'] = self.thumbnails
-        if self.access:
-            data['access'] = self.access
-        if self.client_details:
-            data['client_details'] = self.client_details
-        return data
+        return {
+            'id': self.id,
+            'name': self.name,
+            'type': self.type,
+            'favicon': self.favicon,
+            'thumbnails': self.thumbnails,
+            'access': self.access,
+            'client_details': self.client_details
+        }
 
     @staticmethod
     def newFromJsonDict(data):

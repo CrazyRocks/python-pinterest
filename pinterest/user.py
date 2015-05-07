@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from pinterest import json, PinterestError
+import json
 
 
 class User(object):
@@ -106,7 +106,7 @@ class User(object):
             'created_at': None}
 
         # Override defaults
-        for (param, default) in param_defaults.iteritems():
+        for (param, default) in param_defaults.items():
             setattr(self, param, kwargs.get(param, default))
 
     @property
@@ -776,96 +776,53 @@ class User(object):
         The return value uses the same key names as the JSON representation
         :return: A dict representing this pinterest.User instance
         """
-        data = {}
-        if self.id:
-            data['id'] = self.id
-        if self.first_name:
-            data['first_name'] = self.first_name
-        if self.last_name:
-            data['last_name'] = self.last_name
-        if self.full_name:
-            data['full_name'] = self.full_name
-        if self.following_count:
-            data['following_count'] = self.following_count
-        if self.follower_count:
-            data['follower_count'] = self.follower_count
-        if self.pin_count:
-            data['pin_count'] = self.pin_count
-        if self.board_count:
-            data['board_count'] = self.board_count
-        if self.like_count:
-            data['like_count'] = self.like_count
-        if self.email:
-            data['email'] = self.email
-        if self.email_verified:
-            data['email_verified'] = self.email_verified
-        if self.email_verification_code:
-            data['email_verification_code'] = self.email_verification_code
-        if self.username:
-            data['username'] = self.username
-        if self.about:
-            data['about'] = self.about
-        if self.location:
-            data['location'] = self.location
-        if self.type:
-            data['type'] = self.type
-        if self.pins:
-            data['pins'] = self.pins
-        if self.pin_thumbnail_urls:
-            data['pin_thumbnail_urls'] = self.pin_thumbnail_urls
-        if self.repins_from:
-            data['repins_from'] = self.repins_from
-        if self.followed_boards:
-            data['followed_boards'] = self.followed_boards
-        if self.image_small_url:
-            data['image_small_url'] = self.image_small_url
-        if self.image_medium_url:
-            data['image_medium_url'] = self.image_medium_url
-        if self.image_large_url:
-            data['image_large_url'] = self.image_large_url
-        if self.is_default_image:
-            data['is_default_image'] = self.is_default_image
-        if self.has_password:
-            data['has_password'] = self.has_password
-        if self.is_employee:
-            data['is_employee'] = self.is_employee
-        if self.followed_by_me:
-            data['followed_by_me'] = self.followed_by_me
-        if self.domain_verified:
-            data['domain_verified'] = self.domain_verified
-        if self.explicitly_followed_by_me:
-            data['explicitly_followed_by_me'] = self.explicitly_followed_by_me
-        if self.implicitly_followed_by_me:
-            data['implicitly_followed_by_me'] = self.implicitly_followed_by_me
-        if self.blocked_by_me:
-            data['blocked_by_me'] = self.blocked_by_me
-        if self.gplus_url:
-            data['gplus_url'] = self.gplus_url
-        if self.domain_url:
-            data['domain_url'] = self.domain_url
-        if self.is_partner:
-            data['is_partner'] = self.is_partner
-        if self.indexed:
-            data['indexed'] = self.indexed
-        if self.website_url:
-            data['website_url'] = self.website_url
-        if self.latest_category:
-            data['latest_category'] = self.latest_category
-        if self.ads_customize_from_conversion:
-            data['ads_customize_from_conversion'] = self.ads_customize_from_conversion
-        if self.low_engagement_board_count:
-            data['low_engagement_board_count'] = self.low_engagement_board_count
-        if self.personalize_from_offsite_browsing:
-            data['personalize_from_offsite_browsing'] = self.personalize_from_offsite_browsing
-        if self.verified_domains:
-            data['verified_domains'] = self.verified_domains
-        if self.tag:
-            data['tag'] = self.tag
-        if self.debug:
-            data['debug'] = self.debug
-        if self.created_at:
-            data['created_at'] = self.created_at
-        return data
+        return {
+            'id': self.id,
+            'first_name': self.first_name,
+            'last_name': self.last_name,
+            'full_name': self.full_name,
+            'following_count': self.following_count,
+            'follower_count': self.follower_count,
+            'pin_count': self.pin_count,
+            'board_count': self.board_count,
+            'like_count': self.like_count,
+            'email': self.email,
+            'email_verified': self.email_verified,
+            'email_verification_code': self.email_verification_code,
+            'username': self.username,
+            'about': self.about,
+            'location': self.location,
+            'type': self.type,
+            'pins': self.pins,
+            'pin_thumbnail_urls': self.pin_thumbnail_urls,
+            'repins_from': self.repins_from,
+            'followed_boards': self.followed_boards,
+            'image_small_url': self.image_small_url,
+            'image_medium_url': self.image_medium_url,
+            'image_large_url': self.image_large_url,
+            'is_default_image': self.is_default_image,
+            'has_password': self.has_password,
+            'is_employee': self.is_employee,
+            'followed_by_me': self.followed_by_me,
+            'domain_verified': self.domain_verified,
+            'explicitly_followed_by_me': self.explicitly_followed_by_me,
+            'implicitly_followed_by_me': self.implicitly_followed_by_me,
+            'blocked_by_me': self.blocked_by_me,
+            'gplus_url': self.gplus_url,
+            'domain_url': self.domain_url,
+            'is_partner': self.is_partner,
+            'partner': self.partner,
+            'indexed': self.indexed,
+            'website_url': self.website_url,
+            'latest_category': self.latest_category,
+            'ads_customize_from_conversion': self.ads_customize_from_conversion,
+            'low_engagement_board_count': self.low_engagement_board_count,
+            'personalize_from_offsite_browsing': self.personalize_from_offsite_browsing,
+            'verified_domains': self.verified_domains,
+            'tag': self.tag,
+            'debug': self.debug,
+            'created_at': self.created_at
+        }
 
     @staticmethod
     def newFromJsonDict(data):

@@ -14,11 +14,14 @@
 
 """ A library that provides a Python interface to the Pinterest API """
 
-import urlparse
-import urllib
-import requests
+from urllib.parse import urlparse, urlunparse
 
-from pinterest import (json, Board, Comment, Domain, PinterestError, Pin, User)
+from .board import Board
+from .comment import Comment
+from .domain import Domain
+from .error import PinterestError
+from .pin import Pin
+from .user import User
 
 PRIVACY = ['public', 'secret']
 CATEGORIES = ['animals', 'apparel', 'architecture', 'art', 'art_arch', 'cars_motorcycles', 'celebrities',
@@ -394,7 +397,7 @@ class Api(object):
         :return: URL with extra path elements and parameter
         """
         # Break url into constituent parts
-        (scheme, netloc, path, params, query, fragment) = urlparse.urlparse(url)
+        (scheme, netloc, path, params, query, fragment) = urlparse(url)
 
         # Add any additional path elements to the path
         if path_elements:
@@ -420,7 +423,7 @@ class Api(object):
                 query = extra_query
 
         # Return the rebuilt URL
-        return urlparse.urlunparse((scheme, netloc, path, params, query, fragment))
+        return urlunparse((scheme, netloc, path, params, query, fragment))
 
     def _encode(self, s):
         """

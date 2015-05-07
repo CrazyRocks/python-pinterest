@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from pinterest import json, PinterestError
+import json
 
 
 class Pin(object):
@@ -78,7 +78,7 @@ class Pin(object):
             'created_at': None}
 
         # Override defaults
-        for (param, default) in param_defaults.iteritems():
+        for (param, default) in param_defaults.items():
             setattr(self, param, kwargs.get(param, default))
 
     @property
@@ -566,70 +566,39 @@ class Pin(object):
         The return value uses the same key names as the JSON representation
         :return: A dict representing this pinterest.Pin instance
         """
-        data = {}
-        if self.id:
-            data['id'] = self.id
-        if self.cacheable_id:
-            data['cacheable_id'] = self.cacheable_id
-        if self.title:
-            data['title'] = self.title
-        if self.description:
-            data['description'] = self.description
-        if self.type:
-            data['type'] = self.type
-        if self.domain:
-            data['domain'] = self.domain
-        if self.link:
-            data['link'] = self.link
-        if self.like_count:
-            data['like_count'] = self.like_count
-        if self.comment_count:
-            data['comment_count'] = self.comment_count
-        if self.repin_count:
-            data['repin_count'] = self.repin_count
-        if self.image_square_url:
-            data['image_square_url'] = self.image_square_url
-        if self.image_square_size_pixels:
-            data['image_square_size_pixels'] = self.image_square_size_pixels
-        if self.image_square_size_points:
-            data['image_square_size_points'] = self.image_square_size_points
-        if self.image_medium_url:
-            data['image_medium_url'] = self.image_medium_url
-        if self.image_medium_size_pixels:
-            data['image_medium_size_pixels'] = self.image_medium_size_pixels
-        if self.image_medium_size_points:
-            data['image_medium_size_points'] = self.image_medium_size_points
-        if self.image_large_url:
-            data['image_large_url'] = self.image_large_url
-        if self.image_large_size_pixels:
-            data['image_large_size_pixels'] = self.image_large_size_pixels
-        if self.image_square_size_points:
-            data['image_large_size_points'] = self.image_large_size_points
-        if self.price_value:
-            data['price_value'] = self.price_value
-        if self.price_currency:
-            data['price_currency'] = self.price_currency
-        if self.attribution:
-            data['attribution'] = self.attribution
-        if self.tracked_link:
-            data['tracked_link'] = self.tracked_link
-        if self.promoter:
-            data['promoter'] = self.promoter
-        if self.debug:
-            data['debug'] = self.debug
-        if self.liked_by_me:
-            data['liked_by_me'] = self.liked_by_me
-        if self.is_repin:
-            data['is_repin'] = self.is_repin
-        if self.is_uploaded:
-            data['is_uploaded'] = self.is_uploaded
-        if self.is_playable:
-            data['is_playable'] = self.is_playable
-        if self.is_video:
-            data['is_video'] = self.is_video
-        if self.created_at:
-            data['created_at'] = self.created_at
-        return data
+        return {
+            'id': self.id,
+            'cacheable_id': self.cacheable_id,
+            'title': self.title,
+            'description': self.description,
+            'type': self.type,
+            'domain': self.domain,
+            'link': self.link,
+            'like_count': self.like_count,
+            'comment_count': self.comment_count,
+            'repin_count': self.repin_count,
+            'image_square_url': self.image_square_url,
+            'image_square_size_pixels': self.image_square_size_pixels,
+            'image_square_size_points': self.image_square_size_points,
+            'image_medium_url': self.image_medium_url,
+            'image_medium_size_pixels': self.image_medium_size_pixels,
+            'image_medium_size_points': self.image_medium_size_points,
+            'image_large_url': self.image_large_url,
+            'image_large_size_pixels': self.image_large_size_pixels,
+            'image_large_size_points': self.image_large_size_points,
+            'price_value': self.price_value,
+            'price_currency': self.price_currency,
+            'attribution': self.attribution,
+            'tracked_link': self.tracked_link,
+            'promoter': self.promoter,
+            'debug': self.debug,
+            'liked_by_me': self.liked_by_me,
+            'is_repin': self.is_repin,
+            'is_uploaded': self.is_uploaded,
+            'is_playable': self.is_playable,
+            'is_video': self.is_video,
+            'created_at': self.created_at
+        }
 
     @staticmethod
     def newFromJsonDict(data):

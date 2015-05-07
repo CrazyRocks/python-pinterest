@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from pinterest import json, PinterestError
+import json
 
 
 class Board(object):
@@ -38,7 +38,7 @@ class Board(object):
             'created_at': None}
 
         # Override defaults
-        for (param, default) in param_defaults.iteritems():
+        for (param, default) in param_defaults.items():
             setattr(self, param, kwargs.get(param, default))
 
     @property
@@ -232,30 +232,19 @@ class Board(object):
         The return value uses the same key names as the JSON representation
         :return: A dict representing this pinterest.Board instance
         """
-        data = {}
-        if self.id:
-            data['id'] = self.id
-        if self.name:
-            data['name'] = self.name
-        if self.url:
-            data['url'] = self.url
-        if self.layout:
-            data['layout'] = self.layout
-        if self.category:
-            data['category'] = self.category
-        if self.type:
-            data['type'] = self.type
-        if self.image_thumbnail_url:
-            data['image_thumbnail_url'] = self.image_thumbnail_url
-        if self.is_collaborative:
-            data['is_collaborative'] = self.is_collaborative
-        if self.collaborated_by_me:
-            data['collaborated_by_me'] = self.collaborated_by_me
-        if self.followed_by_me:
-            data['followed_by_me'] = self.followed_by_me
-        if self.created_at:
-            data['created_at'] = self.created_at
-        return data
+        return {
+            'id': self.id,
+            'name': self.name,
+            'url': self.url,
+            'layout': self.layout,
+            'category': self.category,
+            'type': self.type,
+            'image_thumbnail_url': self.image_thumbnail_url,
+            'is_collaborative': self.is_collaborative,
+            'collaborated_by_me': self.collaborated_by_me,
+            'followed_by_me': self.followed_by_me,
+            'created_at': self.created_at
+        }
 
     @staticmethod
     def newFromJsonDict(data):

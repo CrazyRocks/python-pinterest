@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from pinterest import json, PinterestError
+import json
 
 
 class Comment(object):
@@ -24,7 +24,7 @@ class Comment(object):
             'created_at': None}
 
         # Override defaults
-        for (param, default) in param_defaults.iteritems():
+        for (param, default) in param_defaults.items():
             setattr(self, param, kwargs.get(param, default))
 
     @property
@@ -120,16 +120,12 @@ class Comment(object):
         The return value uses the same key names as the JSON representation
         :return: A dict representing this pinterest.Comment instance
         """
-        data = {}
-        if self.id:
-            data['id'] = self.id
-        if self.text:
-            data['text'] = self.text
-        if self.type:
-            data['type'] = self.type
-        if self.created_at:
-            data['created_at'] = self.created_at
-        return data
+        return {
+            'id': self.id,
+            'text': self.text,
+            'type': self.type,
+            'created_at': self.created_at
+        }
 
     @staticmethod
     def newFromJsonDict(data):

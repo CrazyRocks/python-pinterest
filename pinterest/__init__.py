@@ -17,17 +17,15 @@
 __author__ = 'github/jimbach'
 __version__ = '1.0'
 
-import json
-
 try:
     from hashlib import md5
 except ImportError:
     from md5 import md5
 
-from api import Api
-from board import Board
-from comment import Comment
-from domain import Domain
-from error import PinterestError
-from pin import Pin
-from user import User
+from .api import Api
+from .board import Board
+from .comment import Comment
+from .domain import Domain
+from .error import PinterestError
+from .pin import Pin
+from .user import User
