@@ -1,26 +1,27 @@
 =========
-Pinterest
+python-pinterest
 =========
 
 A Python wrapper around the Pinterest API.
 
-By github/jimbach (limbachjordan@gmail.com) @ Shoutlet, Inc
+By Jordan Limbach (limbachjordan@gmail.com) @ Shoutlet, Inc
 
 
 ============
 Introduction
 ============
 
-This library provides a Python interface for the `Pinterest API https://developers.pinterest.com/api_docs/`.
+This library provides a Python interface for the Pinterest API.
+
 This library was developed against Python 3.*
 
 ==========
 Installing
 ==========
 
-You can install pinterest using::
+You can install python-pinterest using::
 
-    $ pip install pinterest
+    $ pip install python-pinterest
 
 Testing::
 
@@ -60,7 +61,7 @@ Documentation
 
 View the last release API documentation at: https://developers.pinterest.com/api_docs/
 
-Methods provided in this library:
+Methods implemented in this library:
 
 def createBoard(self,
                 name=None,
@@ -71,14 +72,22 @@ def createBoard(self,
                 protected=False):
 """
 Creates a Board
-:param name: The name of the Board
-:param privacy: Board privacy settings [public, secret]
-:param category: The category key of the Board (see CATEGORIES)
-:param layout: The layout assigned to the Board [default, places]
-:param description: Free form description text of the Board
-:param protected: Whether or not this board will be a protected Board [True, False]
-:return: The created Board object
+
+param name: The name of the Board
+
+param privacy: Board privacy settings [public, secret]
+
+param category: The category key of the Board (see CATEGORIES)
+
+param layout: The layout assigned to the Board [default, places]
+
+param description: Free form description text of the Board
+
+param protected: Whether or not this board will be a protected Board [True, False]
+
+return: The created Board object
 """
+
 
 def createPin(self,
               board_id=None,
@@ -93,66 +102,95 @@ def createPin(self,
               sdk_client_id=None):
 """
 Creates a Pin
-:param board_id: The ID of the board to pin onto (must be owned by the user
-:param description: The text description for the Pin
-:param source_url: The URL from which the Pin's image was returned
-:param place: The place at which to tag the pin
-:param share_facebook: Whether or not the user wants to share this Pin on Facebook (defaults False)
-:param share_twitter: Whether or not the user wants to share this Pin on Twitter (defaults False)
-:param image_url: The URL of the image to use for the Pin, if it is not uploaded directly
-:param image: The image to use for this Pin as a stream of bytes
-:param method: The method that created the pin (defaults to api_sdk)
-               [android, android_tablet, api_other, api_sdk, bad, bookmarklet, button, email, extension, ipad,
-               iphone, scraped, unknown, uploaded]
-:param sdk_client_id: The original client id of an application that made an SDK request
-:return: The created Pin object
+
+param board_id: The ID of the board to pin onto (must be owned by the user
+
+param description: The text description for the Pin
+
+param source_url: The URL from which the Pin's image was returned
+
+param place: The place at which to tag the pin
+
+param share_facebook: Whether or not the user wants to share this Pin on Facebook (defaults False)
+
+param share_twitter: Whether or not the user wants to share this Pin on Twitter (defaults False)
+
+param image_url: The URL of the image to use for the Pin, if it is not uploaded directly
+
+param image: The image to use for this Pin as a stream of bytes
+
+param method: The method that created the pin (defaults to api_sdk) (android, android_tablet, api_other, api_sdk, bad, bookmarklet, button, email, extension, ipad, iphone, scraped, unknown, uploaded)
+
+param sdk_client_id: The original client id of an application that made an SDK request
+
+return: The created Pin object
 """
 
-def getBoardPins(self, board_id=None):
+
+def getBoardPins(self,
+		 board_id=None):
 """
 Gets the Pins of a specific Board
-:param board_id: The Board ID
-:return: List of Pins for a specific Board
+
+param board_id: The Board ID
+
+return: List of Pins for a specific Board
 """
 
-def getDomain(self, domain_name=None):
+
+def getDomain(self,
+	      domain_name=None):
 """
 Gets a Domain's info
-:param domain_name: The Domain name
-:return: A Domain object
+
+param domain_name: The Domain name
+
+return: A Domain object
 """
 
-def getDomainPins(self, domain_name=None):
+
+def getDomainPins(self,
+                  domain_name=None):
 """
 Gets the Pins for a specific Domain
-:param domain_name: The Domain's name
-:return: A list of Pins for a specific Domain
+
+param domain_name: The Domain's name
+
+return: A list of Pins for a specific Domain
 """
 
-def getPinComments(self, pin_id=None):
+
+def getPinComments(self,
+                   pin_id=None):
 """
 Gets the comments for a specific Pin
-:param pin_id: The Pin ID
-:return: A list of Comments for the specific Pin
+
+param pin_id: The Pin ID
+
+return: A list of Comments for the specific Pin
 """
 
-def getMyInformation(self):
+
+def getMyInformation(self
+                    ):
 """
 Gets the User details for the authenticated User
-:return: A User object
+
+return: A User object
 """
 
-def getMyBoards(self):
+
+def getMyBoards(self
+               ):
 """
 Gets the Boards for the authenticated User
-:return: List of Boards for the authenticated User
+
+return: List of Boards for the authenticated User
 """
 
 =====
 Using
 =====
-
-The library provides a Python wrapper around the Pinterest API and the Pinterest data model.
 
 -----
 Model
@@ -183,12 +221,12 @@ To fetch a Board's list of Pins (requires authentication)::
     >>> print [p.title for p in pins]
 
 To create a Board (requires authentication)::
-    >>> board = api.PostUpdate(name='Vacation Destinations',
-                               privacy='public',
-                               category='travel_places',
-                               layout='default',
-                               description='Places I want to vacation to',
-                               protected=False)
+    >>> board = api.createBoard(name='Vacation Destinations',
+                                privacy='public',
+                                category='travel_places',
+                                layout='default',
+                                description='Places I want to vacation to',
+                                protected=False)
     >>> print board.name
     Vacation Destinations
 
@@ -200,7 +238,7 @@ There are many more API methods, to read the full API documentation::
 Contributors
 ------------
 
-Developed by Jordan Limbach in collaboration with Shoutlet, Inc.
+Developed by Jordan Limbach @ Shoutlet, Inc.
 
 -------
 License
