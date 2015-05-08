@@ -28,7 +28,7 @@ def read(*paths):
         return f.read()
 
 setup(
-    name='pinterest',
+    name='python-pinterest',
     version='1.0',
     author='Jordan Limbach github/jimbach',
     author_email='limbachjordan@gmail.com',
@@ -38,7 +38,7 @@ setup(
     description='A Python wrapper around the Pinterest API',
     long_description=(read('README.rst')),
     packages=find_packages(exclude=['tests*']),
-    install_requires=['requests'],
+    install_requires=['requests', 'flake8'],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
