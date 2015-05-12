@@ -14,7 +14,8 @@
 
 """ A library that provides a Python interface to the Pinterest API """
 
-from urllib.parse import urlparse, urlunparse
+from urllib.parse import urlparse, urlunparse, urlencode
+import requests
 
 from .board import Board
 from .comment import Comment
@@ -80,7 +81,6 @@ class Api(object):
                          Defaults to https://api.pinterest.com/v3 [Optional]
         :return:
         """
-        self._requests = requests
         self._input_encoding = input_encoding
 
         if base_url is None:
@@ -289,17 +289,21 @@ class Api(object):
 
         return Board.newFromJsonDict(data['data'])
 
-    def getBoardPins(self, board_id=None):
+    def getBoardPins(self, board_id=None, bookmark=False):
         """
         Gets the Pins of a specific Board
         :param board_id: The Board ID
         :return: List of Pins for a specific Board
         """
         url = '{}/boards/{}/pins/'.format(self.base_url, board_id)
-        response = self._requestUrl(url, 'GET')
+        extra_params = {}  # Check for pagination
+        if bookmark:
+            extra_params['bookmark'] = bookmark
+        response = self._requestUrl(url, 'GET', data=extra_params)
         data = self._parseAndCheckPinterest(response)
+        bookmark = data['bookmark'] if 'bookmark' in data and data['bookmark'] != '' else False
 
-        return [Pin.newFromJsonDict(x) for x in data['data']]
+        return [Pin.newFromJsonDict(x) for x in data['data']], bookmark
 
     def getDomain(self, domain_name=None):
         """
@@ -320,7 +324,7 @@ class Api(object):
 
         return Domain.newFromJsonDict(data['data'])
 
-    def getDomainPins(self, domain_name=None):
+    def getDomainPins(self, domain_name=None, bookmark=False):
         """
         Gets the Pins for a specific Domain
         :param domain_name: The Domain's name
@@ -334,12 +338,16 @@ class Api(object):
         if domain_name is None:
             raise PinterestError({'message': 'A Domain name is required.'})
 
-        response = self._requestUrl(url, 'GET')
+        extra_params = {}  # Check for pagination
+        if bookmark:
+            extra_params['bookmark'] = bookmark
+        response = self._requestUrl(url, 'GET', data=extra_params)
         data = self._parseAndCheckPinterest(response)
+        bookmark = data['bookmark'] if 'bookmark' in data and data['bookmark'] != '' else False
 
-        return [Pin.newFromJsonDict(x) for x in data['data']]
+        return [Pin.newFromJsonDict(x) for x in data['data']], bookmark
 
-    def getPinComments(self, pin_id=None):
+    def getPinComments(self, pin_id=None, bookmark=False):
         """
         Gets the comments for a specific Pin
         :param pin_id: The Pin ID
@@ -353,10 +361,14 @@ class Api(object):
         if pin_id is None:
             raise PinterestError({'message': 'A Pin ID is required.'})
 
-        response = self._requestUrl(url, 'GET')
+        extra_params = {}  # Check for pagination
+        if bookmark:
+            extra_params['bookmark'] = bookmark
+        response = self._requestUrl(url, 'GET', data=extra_params)
         data = self._parseAndCheckPinterest(response)
+        bookmark = data['bookmark'] if 'bookmark' in data and data['bookmark'] != '' else False
 
-        return [Comment.newFromJsonDict(x) for x in data['data']]
+        return [Comment.newFromJsonDict(x) for x in data['data']], bookmark
 
     def getMyInformation(self):
         """
@@ -373,7 +385,7 @@ class Api(object):
 
         return User.newFromJsonDict(data['data'])
 
-    def getMyBoards(self):
+    def getMyBoards(self, bookmark=False):
         """
         Gets the Boards for the authenticated User
         :return: List of Boards for the authenticated User
@@ -383,10 +395,14 @@ class Api(object):
         if not self._access_token:
             raise PinterestError({'message': 'API must be authenticated.'})
 
-        response = self._requestUrl(url, 'GET')
+        extra_params = {}  # Check for pagination
+        if bookmark:
+            extra_params['bookmark'] = bookmark
+        response = self._requestUrl(url, 'GET', data=extra_params)
         data = self._parseAndCheckPinterest(response)
+        bookmark = data['bookmark'] if 'bookmark' in data and data['bookmark'] != '' else False
 
-        return [Board.newFromJsonDict(x) for x in data['data']]
+        return [Board.newFromJsonDict(x) for x in data['data']], bookmark
 
     def _buildUrl(self, url, path_elements=None, extra_params=None):
         """
@@ -411,7 +427,7 @@ class Api(object):
         if query:
             query += '&access_token={}'.format(self._access_token)
         else:
-            query = '?access_token={}'.format(self._access_token)
+            query = 'access_token={}'.format(self._access_token)
 
         # Add any additional query parameters to the query string
         if extra_params and len(extra_params) > 0:
@@ -432,9 +448,9 @@ class Api(object):
         :return: Encoded string
         """
         if self._input_encoding:
-            return unicode(s, self._input_encoding).encode('utf-8')
+            return str(s, self._input_encoding).encode('utf-8')
         else:
-            return unicode(s).encode('utf-8')
+            return str(s).encode('utf-8')
 
     def _encodeParameters(self, parameters):
         """
@@ -447,7 +463,7 @@ class Api(object):
         if parameters is None:
             return None
         else:
-            return urllib.urlencode(dict([(k, self._encode(v)) for k, v in parameters.items() if v is not None]))
+            return urlencode(dict([(k, self._encode(v)) for k, v in parameters.items() if v is not None]))
 
     def _encodePostData(self, post_data):
         """
@@ -461,7 +477,7 @@ class Api(object):
         if post_data is None:
             return None
         else:
-            return urllib.urlencode(dict([(k, self._encode(v)) for k, v in post_data.items()]))
+            return urlencode(dict([(k, self._encode(v)) for k, v in post_data.items()]))
 
     def _requestUrl(self, url, verb, data=None):
         """
@@ -469,6 +485,7 @@ class Api(object):
         :param url: The web location we want to retrieve
         :param verb: POST, GET, PUT
         :param data: A dictionary of key/value pairs
+        :param bookmark: A field used for pagination
         :return: A JSON object
         """
         if verb == 'PUT':
