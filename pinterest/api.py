@@ -375,7 +375,7 @@ class Api(object):
         Gets the User details for the authenticated User
         :return: A User object
         """
-        url = '{}/user/me/'.format(self.base_url)
+        url = '{}/users/me/'.format(self.base_url)
 
         if not self._access_token:
             raise PinterestError({'message': 'API must be authenticated.'})
