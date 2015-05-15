@@ -112,12 +112,14 @@ Creates a Pin
 
 
 def getBoardPins(self,
-		 board_id=None):
+		 board_id=None,
+		 bookmark=False):
 """
 Gets the Pins of a specific Board
 
 - param board_id: The Board ID
-- return: List of Pins for a specific Board
+- param bookmark: Pass in for pagination
+- return: Tuple containing list of Pins for a specific Board and bookmark if more than one page
 """
 
 
@@ -132,22 +134,26 @@ Gets a Domain's info
 
 
 def getDomainPins(self,
-                  domain_name=None):
+                  domain_name=None,
+                  bookmark=False):
 """
 Gets the Pins for a specific Domain
 
 - param domain_name: The Domain's name
-- return: A list of Pins for a specific Domain
+- param bookmark: Pass in for pagination
+- return: Tuple containing list of Pins for a specific Domain and bookmark if more than one page
 """
 
 
 def getPinComments(self,
-                   pin_id=None):
+                   pin_id=None,
+                   bookmark=False):
 """
 Gets the comments for a specific Pin
 
 - param pin_id: The Pin ID
-- return: A list of Comments for the specific Pin
+- param bookmark: Pass in for pagination
+- return: Tuple containing list of Comments for a specific Pin and bookmark if more than one page
 """
 
 
@@ -161,11 +167,12 @@ Gets the User details for the authenticated User
 
 
 def getMyBoards(self
-               ):
+                bookmark=False):
 """
 Gets the Boards for the authenticated User
 
-- return: List of Boards for the authenticated User
+- param bookmark: Pass in for pagination
+- return: Tuple containing list of Boards for the authenticated User the authenticated User and bookmark if more than one page
 """
 
 =====
@@ -197,8 +204,12 @@ To create an instance of the ``pinterest.Api`` with login credentials (Pinterest
     >>> api = pinterest.Api(access_token='userAccessToken')
 
 To fetch a Board's list of Pins (requires authentication)::
-    >>> pins = api.getBoardPins('boardId')
-    >>> print [p.title for p in pins]
+    >>> pins_bookmark = False
+    >>> while True:
+    >>>     pins, pins_bookmark = api.getBoardPins('boardId', pins_bookmark)
+    >>>     print [p.title for p in pins]
+    >>>     if not pins_bookmark:
+    >>>         break
 
 To create a Board (requires authentication)::
     >>> board = api.createBoard(name='Vacation Destinations',
